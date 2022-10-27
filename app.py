@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello from Koyeb'
+    return 'URL'
+
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
@@ -15,6 +16,7 @@ headers = {
     "Accept-Encoding": "gzip, deflate, br",
     "Referer": "http://www.sdyu.edu.cn/index.htm",
 }
+
 
 @app.route('/url/')
 def demo():
