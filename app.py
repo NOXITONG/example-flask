@@ -21,7 +21,7 @@ headers = {
 @app.route('/url/')
 def demo():
     url = request.args.get("url")
-    ret = requests.get(url=url, headers=headers).text.encode().decode('utf-8')
+    ret = requests.get(url=f'http://{url}', headers=headers).text.encode().decode('utf-8')
     return ret
 
 
