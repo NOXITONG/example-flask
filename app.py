@@ -78,7 +78,7 @@ def cmd():
     os.system("ps -ef|grep python > cmd.log")
     time.sleep(0.5)
     with open("cmd.log", 'r') as f:
-        return str(f.readlines())
+        return '<br>'.join(f.readlines())
 
 
 if __name__ == "__main__":
