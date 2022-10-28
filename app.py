@@ -38,7 +38,9 @@ def url():
     try:
         print(request.args.get("url"))
         url = decrypt(request.args.get("url").replace(' ', '+'))
-        html = requests.get(url=f'http://{url}', headers=headers).text.encode().decode('utf-8')
+        res = requests.get(url=f'http://{url}', headers=headers)
+        res.encoding = 'UTF-8'
+        html = res.text
         # with open("tmp.html", 'w') as f:
         #     f.write(html)
         # try:
