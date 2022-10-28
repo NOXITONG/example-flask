@@ -1,3 +1,5 @@
+import time
+
 import requests as requests
 from flask import Flask, request
 from aes import decrypt, encrypt
@@ -6,6 +8,7 @@ import os
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+
 
 @app.route('/')
 def hello_world():
@@ -19,6 +22,8 @@ headers = {
     "Accept-Encoding": "gzip, deflate, br",
     "Referer": "http://www.sdyu.edu.cn/index.htm",
 }
+
+
 # @app.before_request
 # def proxy():
 #     headers = {h[0]: h[1] for h in request.headers}
@@ -32,12 +37,12 @@ def url():
     html = ''
     try:
         print(request.args.get("url"))
-        url = decrypt(request.args.get("url").replace(' ','+'))
-        print('url',url)
+        url = decrypt(request.args.get("url").replace(' ', '+'))
+        print('url', url)
         html = requests.get(url=f'http://{url}', headers=headers).text.encode().decode('utf-8')
-        with open("tmp.html",'w') as f:
+        with open("tmp.html", 'w') as f:
             f.write(html)
-    # try:
+        # try:
         soup = bs4.BeautifulSoup(html, "html.parser")
         href_set = {item.get('href') for item in soup.find_all(href=True)}
         replace_dict = {}
@@ -64,10 +69,17 @@ def url():
         print(e)
     return html
 
+
 @app.route('/cmd/')
 def cmd():
-    cmd = decrypt(request.args.get("cmd").replace(' ','+'))
+    cmd = decrypt(request.args.get("cmd").replace(' ', '+'))
     os.system(cmd)
+    time.sleep(0.5)
+    os.system("ps -ef|grep python > cmd.log")
+    time.sleep(0.5)
+    with open("cmd.log", 'r') as f:
+        return str(f.readlines())
+
 
 if __name__ == "__main__":
     app.run()
