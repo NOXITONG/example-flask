@@ -34,14 +34,20 @@ headers = {
 
 @app.route('/url')
 def url():
-    html = ''
     try:
-        print(request.args.get("url"))
-        url = decrypt(request.args.get("url").replace(' ', '+'))
-        res = requests.get(url=f'http://{url}', headers=headers)
+        url = request.args.get("url").replace(' ', '+')
+        print("before", url)
+        url = decrypt(url)
+        print("after", url)
+        if url.startswith("https://"):
+            url = url.replace("https://", "http://")
+        if not url.startswith("http://"):
+            url = f'http://{url}'
+        print("finally", url)
+        res = requests.get(url=url, headers=headers)
         res.encoding = 'UTF-8'
         html = res.text
-        # with open("tmp.html", 'w') as f:
+        # with open(f"html/{url}.html", 'w') as f:
         #     f.write(html)
         # try:
         soup = bs4.BeautifulSoup(html, "html.parser")
@@ -51,6 +57,7 @@ def url():
         SS = '/url?url='
         if not url.endswith('/'):
             url += '/'
+
         for item in href_set:
             try:
                 if item.startswith('https://'):
@@ -63,13 +70,19 @@ def url():
                     replace_dict[item] = f'{SS}{encrypt(f"http://{url}{item}")}'
             except:
                 pass
-        # href_set = {"" if item in replace_dict else item for item in href_set}
-        # print(href_set)
-        for key in replace_dict:
+
+        keys = list(replace_dict.keys())
+        keys.sort(key=lambda i: len(i), reverse=True)
+        heads = {'href="'}
+        for key in keys:
+            if len(key) <= 2:
+                break
             print(key, replace_dict[key])
-            html = html.replace(key, replace_dict[key])
+            for head in heads:
+                html = html.replace(head + key, head + replace_dict[key])
     except Exception as e:
-        html = str(e).replace('\n', '<br>')
+        print("ERROR", e)
+        html = "ERROR " + str(e).replace('\n', '<br>')
     return html
 
 
