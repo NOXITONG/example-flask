@@ -46,7 +46,7 @@ def url():
         href_set = {item.get('href') for item in soup.find_all(href=True)}
         replace_dict = {}
         # print(href_set)
-        SS = '/url/?url='
+        SS = '/url?url='
         if not url.endswith('/'):
             url += '/'
         for item in href_set:
