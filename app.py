@@ -77,7 +77,7 @@ def url():
         for key in keys:
             if len(key) <= 2:
                 break
-            # print(key, replace_dict[key])
+            print(key, replace_dict[key])
             for head in heads:
                 html = html.replace(head + key, head + replace_dict[key])
     except Exception as e:
