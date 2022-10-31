@@ -36,14 +36,14 @@ headers = {
 def url():
     try:
         url = request.args.get("url").replace(' ', '+')
-        print("before", url)
+        # print("before", url)
         url = decrypt(url)
-        print("after", url)
+        # print("after", url)
         if url.startswith("https://"):
             url = url.replace("https://", "http://")
         if not url.startswith("http://"):
             url = f'http://{url}'
-        print("finally", url)
+        # print("finally", url)
         res = requests.get(url=url, headers=headers)
         res.encoding = 'UTF-8'
         html = res.text
@@ -77,7 +77,7 @@ def url():
         for key in keys:
             if len(key) <= 2:
                 break
-            print(key, replace_dict[key])
+            # print(key, replace_dict[key])
             for head in heads:
                 html = html.replace(head + key, head + replace_dict[key])
     except Exception as e:
