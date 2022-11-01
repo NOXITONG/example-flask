@@ -34,7 +34,8 @@ headers = {
 
 @app.route('/url')
 def url():
-    try:
+    if True:
+        # try:
         url = request.args.get("url").replace(' ', '+')
         # print("before", url)
         url = decrypt(url)
@@ -45,10 +46,13 @@ def url():
             url = f'http://{url}'
         # print("finally", url)
         res = requests.get(url=url, headers=headers)
-        html = res.content.decode('utf8',"ignore").encode('gbk',"ignore")
+        # print(res.content)
+        # print(res.content.decode('utf8',"ignore"))
+        print(res.content.decode(errors="ignore").encode(errors="ignore"))
+        html = res.content.decode(errors="ignore").encode(errors="ignore")
         # res.encoding = 'UTF-8'
         # html = res.text
-        
+
         # with open(f"html/{url}.html", 'w') as f:
         #     f.write(html)
         # try:
@@ -81,10 +85,12 @@ def url():
                 break
             print(key, replace_dict[key])
             for head in heads:
-                html = html.replace(head + key, head + replace_dict[key])
-    except Exception as e:
-        print("ERROR", e)
-        html = "ERROR " + str(e).replace('\n', '<br>')
+                # html = html.replace(head + key, head + replace_dict[key])
+                html = html.replace((head + key).encode(errors="ignore"),
+                                    (head + replace_dict[key]).encode(errors="ignore"))
+    # except Exception as e:
+    #     print("ERROR", e)
+    #     html = "ERROR " + str(e).replace('\n', '<br>')
     return html
 
 
