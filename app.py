@@ -48,8 +48,8 @@ def url():
         res = requests.get(url=url, headers=headers)
         # print(res.content)
         # print(res.content.decode('utf8',"ignore"))
-        print(res.content.decode(errors="ignore").encode(errors="ignore"))
-        html = res.content.decode(errors="ignore").encode(errors="ignore")
+        # print(res.content.decode(errors="ignore").encode(encoding='utf-8',errors="ignore"))
+        html = res.content.decode(errors="ignore").encode(encoding='utf-8', errors="ignore")
         # res.encoding = 'UTF-8'
         # html = res.text
 
