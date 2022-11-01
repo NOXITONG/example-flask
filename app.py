@@ -45,8 +45,10 @@ def url():
             url = f'http://{url}'
         # print("finally", url)
         res = requests.get(url=url, headers=headers)
-        res.encoding = 'UTF-8'
-        html = res.text
+        html = res.content.decode('utf8',"ignore").encode('gbk',"ignore")
+        # res.encoding = 'UTF-8'
+        # html = res.text
+        
         # with open(f"html/{url}.html", 'w') as f:
         #     f.write(html)
         # try:
