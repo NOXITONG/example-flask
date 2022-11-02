@@ -34,7 +34,6 @@ headers = {
 #     return requests.request(request.method, request.url, data=request.json, headers=headers).content
 
 def content_decode(string):
-    print(chardet.detect(string))
     try:
         return string.decode(encoding='utf8')
     except:
@@ -48,7 +47,9 @@ def content_decode(string):
     except:
         pass
     try:
-        return string.decode(encoding=chardet.detect(string)['encoding'])
+        detect_charset = chardet.detect(string)
+        print(detect_charset)
+        return string.decode(encoding=detect_charset['encoding'])
     except:
         pass
     return string
@@ -57,6 +58,10 @@ def content_decode(string):
 @app.route('/url')
 def url():
     if True:
+        encoding = request.args.get("encoding")
+        if encoding is None:
+            encoding = 'utf8'
+        print('*******', encoding)
         # try:
         url = request.args.get("url").replace(' ', '+')
         # print("before", url)
@@ -71,7 +76,7 @@ def url():
         # print(res.content)
         # print(res.content.decode('utf8',"ignore"))
         # print(res.content.decode(errors="ignore").encode(encoding='utf-8',errors="ignore"))
-        html = content_decode(res.content).encode()  # .encode(encoding='utf-8', errors="ignore")
+        html = content_decode(res.content).encode(encoding=encoding)  # .encode(encoding='utf-8', errors="ignore")
         # res.encoding = 'UTF-8'
         # html = res.text
 
