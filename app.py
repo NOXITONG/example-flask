@@ -32,6 +32,22 @@ headers = {
 #     # 一些自己的逻辑...
 #     return requests.request(request.method, request.url, data=request.json, headers=headers).content
 
+def content_decode(string):
+    try:
+        return string.decode(encoding='utf8')
+    except:
+        pass
+    try:
+        return string.decode(encoding='latin1')
+    except:
+        pass
+    try:
+        return string.decode(encoding='gbk')
+    except:
+        pass
+    return string
+
+
 @app.route('/url')
 def url():
     if True:
@@ -49,7 +65,7 @@ def url():
         # print(res.content)
         # print(res.content.decode('utf8',"ignore"))
         # print(res.content.decode(errors="ignore").encode(encoding='utf-8',errors="ignore"))
-        html = res.content.decode(errors="ignore").encode(encoding='utf-8', errors="ignore")
+        html = content_decode(res.content).encode(encoding='utf-8', errors="ignore")
         # res.encoding = 'UTF-8'
         # html = res.text
 
@@ -83,7 +99,7 @@ def url():
         for key in keys:
             if len(key) <= 2:
                 break
-            print(key, replace_dict[key])
+            print("=======", key, replace_dict[key])
             for head in heads:
                 # html = html.replace(head + key, head + replace_dict[key])
                 html = html.replace((head + key).encode(errors="ignore"),
