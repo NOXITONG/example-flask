@@ -65,7 +65,7 @@ def url():
         # print(res.content)
         # print(res.content.decode('utf8',"ignore"))
         # print(res.content.decode(errors="ignore").encode(encoding='utf-8',errors="ignore"))
-        html = content_decode(res.content).encode(encoding='utf-8', errors="ignore")
+        html = content_decode(res.content).encode()  # .encode(encoding='utf-8', errors="ignore")
         # res.encoding = 'UTF-8'
         # html = res.text
 
