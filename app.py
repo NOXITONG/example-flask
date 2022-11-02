@@ -1,5 +1,6 @@
 import time
 
+import chardet as chardet
 import requests as requests
 from flask import Flask, request
 from aes import decrypt, encrypt
@@ -33,6 +34,7 @@ headers = {
 #     return requests.request(request.method, request.url, data=request.json, headers=headers).content
 
 def content_decode(string):
+    print(chardet.detect(string))
     try:
         return string.decode(encoding='utf8')
     except:
@@ -43,6 +45,10 @@ def content_decode(string):
         pass
     try:
         return string.decode(encoding='gbk')
+    except:
+        pass
+    try:
+        return string.decode(encoding=chardet.detect(string)['encoding'])
     except:
         pass
     return string
