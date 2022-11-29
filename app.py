@@ -16,12 +16,19 @@ def hello_world():
     return 'URL'
 
 
+# headers = {
+#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+#     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+#     "Accept-Language": "zh-CN",
+#     "Accept-Encoding": "gzip, deflate, br",
+#     "Referer": "http://www.sdyu.edu.cn/index.htm",
+# }
+
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "Accept-Language": "zh-CN",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Referer": "http://www.sdyu.edu.cn/index.htm",
+    "Accept-Encoding": "utf8",
 }
 
 
@@ -76,7 +83,8 @@ def url():
         # print(res.content)
         # print(res.content.decode('utf8',"ignore"))
         # print(res.content.decode(errors="ignore").encode(encoding='utf-8',errors="ignore"))
-        html = content_decode(res.content).encode(encoding=encoding)  # .encode(encoding='utf-8', errors="ignore")
+        # html = content_decode(res.content).encode(encoding=encoding)  # .encode(encoding='utf-8', errors="ignore")
+        html = res.content  # .encode(encoding='utf-8', errors="ignore")
         # res.encoding = 'UTF-8'
         # html = res.text
 
